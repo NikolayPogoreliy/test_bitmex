@@ -1,0 +1,6 @@
+[flake8]
+exclude = .git,__pycache__,*/migrations/*,venv
+inline-quotes = '
+max-line-length = 120
+select = E,F,W,C4,Q0, DJ, N80, ABS
+ignore = W504, DJ08, DJ01, E126
