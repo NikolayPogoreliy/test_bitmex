@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'apps.account',
     'apps.order'
 ]
@@ -136,3 +137,16 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PGCRYPTO_KEY = os.getenv('PGCRYPTO_KEY', 'R438&*fqo&bll0bb3c6ijKF^5X3vsSw^H*LOE@R')
+
+SWAGGER_SETTINGS = {
+    'PERSIST_AUTH': True,
+    'DEEP_LINKING': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    # "DEFAULT_AUTO_SCHEMA_CLASS": 'cert_institue_back.schema.Schema'
+}
