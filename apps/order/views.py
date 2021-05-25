@@ -16,3 +16,7 @@ class OrderView(
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = (IsAuthenticated, )
+
+    def retrieve(self, request, *args, **kwargs):
+        order = self.get_object()
+        return super().retrieve(request, *args, **kwargs)
