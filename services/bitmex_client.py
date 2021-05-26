@@ -16,3 +16,9 @@ class BitmexClient:
         price
     ):
         return self.client.Order.Order_new(symbol=symbol, orderQty=volume, price=price, side=side).result()
+
+    def order_list(self):
+        return self.client.Order.Order_getOrders().result()
+
+    def order_retrieve(self, order_id):
+        return self.client.Order.Order_getOrders(filter={'orderID': order_id}).result()
