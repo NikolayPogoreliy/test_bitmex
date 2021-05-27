@@ -6,4 +6,4 @@ from apps.order.models import Order
 class OrderFilter(filters.FilterSet):
     class Meta:
         model = Order
-        fields = ('account__name',)
+        fields = ('author_account__id',)

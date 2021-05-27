@@ -10,10 +10,12 @@ class OrdersideChoices(TextChoices):
 
 
 class Order(models.Model):
-    order_id = models.CharField(max_length=20, unique=True)
+    order_id = models.CharField(max_length=36, unique=True)
     symbol = models.CharField(max_length=6)
     volume = models.PositiveIntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
     side = models.CharField(max_length=4, choices=OrdersideChoices.choices, default=OrdersideChoices.BUY)
     price = models.IntegerField(null=True)
-    account = models.ForeignKey('account.Account', on_delete=models.CASCADE)
+    author_account = models.ForeignKey('account.Account', on_delete=models.CASCADE, null=True)
+    account = models.PositiveIntegerField(null=True)
+    status = models.CharField(max_length=15, blank=True, null=True)
