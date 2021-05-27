@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'channels',
     'drf_yasg',
     'apps.account',
-    'apps.order'
+    'apps.order',
+    'apps.subscription'
 ]
 
 MIDDLEWARE = [
@@ -150,4 +152,15 @@ SWAGGER_SETTINGS = {
         }
     },
     # "DEFAULT_AUTO_SCHEMA_CLASS": 'cert_institue_back.schema.Schema'
+}
+
+# Channels
+ASGI_APPLICATION = 'ep2_1.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }
