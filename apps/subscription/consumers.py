@@ -36,10 +36,11 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
             )
         elif message.get('action') == 'subscribe':
             Subscriber.objects.filter(account=account).delete()  # TODO: do we need it?
-            await self.channel_layer.group_add(
+            await self.channel_layer.group_discard(
                 self.room_group_name,
                 self.channel_name
             )
+            await self.close()
         # Send message to room group
         # await self.channel_layer.group_send(
         #     self.room_group_name,
