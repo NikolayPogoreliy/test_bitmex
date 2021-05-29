@@ -1,3 +1,5 @@
+import json
+
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.shortcuts import get_object_or_404
 
@@ -28,13 +30,14 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
     async def receive_json(self, content, **kwargs):
         message = content['message']
         account = get_object_or_404(Account, name=message.get('account'))
+        self.scope['session']['account'] = account.name
         if message.get('action') == 'subscribe':
             Subscriber.objects.get_or_create(account=account)  # TODO: do we need it?
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name
             )
-        elif message.get('action') == 'subscribe':
+        elif message.get('action') == 'unsubscribe':
             Subscriber.objects.filter(account=account).delete()  # TODO: do we need it?
             await self.channel_layer.group_discard(
                 self.room_group_name,
@@ -52,7 +55,9 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
 
     # Receive message from room group
     async def feed_message(self, event):
-        message = event['message']
+        message = json.loads(event['message'])
 
         # Send message to WebSocket
+        message.update({'account': self.scope['session']['account']})
+        print(message)
         await self.send_json(content=message)

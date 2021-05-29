@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    # 'django_celery_beat',
     'rest_framework',
     'django_filters',
     'channels',
@@ -93,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'bitmex_db'),
         'USER': os.getenv('DB_USER', 'bitmex_user'),
-        'PASSWORD': os.getenv('DB_USER', 'bitmex_password'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'bitmex_password'),
         'HOST': os.getenv('DB_HOST', '127.0.0.1'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
@@ -170,3 +171,13 @@ CHANNEL_LAYERS = {
         },
     },
 }
+REDIS_ADDR = f'redis://{os.getenv("CHANNELS_HOST", "127.0.0.1")}:{os.getenv("CHANNELS_PORT", 6379)}'
+CELERY_BROKER_URL = REDIS_ADDR + '/1'
+CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Kiev'
+DJANGO_CELERY_BEAT_TZ_AWARE = True
+CELERY_ENABLE_UTC = False
+CELERY_IMPORTS = [
+    'apps.subscription.tasks',
+]
