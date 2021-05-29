@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cg&&q5=&4lrvt__2p@7zqv-^j^gd9r7cd3@-@g@6y9mywbq&_+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').capitalize() == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'django_filters',
     'channels',
@@ -53,12 +54,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'ep2_1.urls'
 
@@ -88,11 +91,11 @@ WSGI_APPLICATION = 'ep2_1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bitmex_db',
-        'USER': 'bitmex_user',
-        'PASSWORD': 'bitmex_password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'bitmex_db'),
+        'USER': os.getenv('DB_USER', 'bitmex_user'),
+        'PASSWORD': os.getenv('DB_USER', 'bitmex_password'),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -160,7 +163,10 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(
+                os.getenv('CHANNELS_HOST', '127.0.0.1'),
+                int(os.getenv('CHANNELS_PORT', 6379))
+            )],
         },
     },
 }
