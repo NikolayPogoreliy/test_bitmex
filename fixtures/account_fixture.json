@@ -1,0 +1,11 @@
+[
+  {
+    "model": "account.account",
+    "pk": 1,
+    "fields": {
+      "name": "test_acc",
+      "api_key": "48GphC_MTWN_0ntW4V1osU4S",
+      "api_secret": "-hoVHM9kC1JRwlQBPjYdzosCCpKl7CNtomzyCTGVoLcQ5PSV"
+    }
+  }
+]
