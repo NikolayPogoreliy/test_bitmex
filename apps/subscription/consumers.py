@@ -1,13 +1,11 @@
 import json
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from django.shortcuts import get_object_or_404
 
 from apps.account.models import Account
 from apps.subscription.models import Subscriber
-
-
 # TODO: add bitmex-ws
+from utills.async_utills import async_get_object_or_404
 
 
 class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
@@ -29,7 +27,7 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from WebSocket
     async def receive_json(self, content, **kwargs):
         message = content['message']
-        account = get_object_or_404(Account, name=message.get('account'))
+        account = await async_get_object_or_404(Account, name=message.get('account'))
         self.scope['session']['account'] = account.name
         if message.get('action') == 'subscribe':
             Subscriber.objects.get_or_create(account=account)  # TODO: do we need it?
