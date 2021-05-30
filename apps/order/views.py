@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, exceptions
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_api_key.permissions import HasAPIKey
 
 from apps.account.models import Account
 from apps.order.models import Order
@@ -19,8 +21,15 @@ class OrderView(
 ):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    # permission_classes = (IsAuthenticated, )
-    permission_classes = (AllowAny,)
+    debug_permission_classes = (AllowAny,)
+    permission_classes = (HasAPIKey,)
+
+    def get_permissions(self):
+        if settings.get('DEBUG'):
+            permission_classes = self.debug_permission_classes
+        else:
+            permission_classes = self.permission_classes
+        return [permission() for permission in permission_classes]
 
     def _update_object(self, result, account):
         datas = {
@@ -33,6 +42,9 @@ class OrderView(
         return result
 
     def retrieve(self, request, account_name: str = None, pk=None, *args, **kwargs):
+        """
+        Retrieve info about single order (specified by DB-id) for certain account
+        """
         account = get_object_or_404(Account, name=account_name)
         order = self.get_object()
         if order.author_account.id != account.id:
@@ -42,6 +54,9 @@ class OrderView(
         return Response(results)
 
     def list(self, request, account_name: str = None, *args, **kwargs):
+        """
+        Get list of all orders for certain account
+        """
         account = get_object_or_404(Account, name=account_name)
         client = BitmexClient(account)
         results = client.order_list()
@@ -52,6 +67,9 @@ class OrderView(
         return Response(resp)
 
     def create(self, request, account_name: str = None, *args, **kwargs):
+        """
+        Place a new order
+        """
         data = request.data
         account = get_object_or_404(Account, name=account_name)
 
@@ -61,6 +79,9 @@ class OrderView(
         return Response(result)
 
     def destroy(self, request, account_name: str = None, *args, **kwargs):
+        """
+        Delete (cancel) the order
+        """
         account = get_object_or_404(Account, name=account_name)
         order = self.get_object()
         if order.author_account_id != account.id:
