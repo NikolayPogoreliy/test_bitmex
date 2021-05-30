@@ -3,7 +3,6 @@ import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from apps.account.models import Account
-from apps.subscription.models import Subscriber
 # TODO: add bitmex-ws
 from utills.async_utills import async_get_object_or_404
 
@@ -30,26 +29,16 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
         account = await async_get_object_or_404(Account, name=message.get('account'))
         self.scope['session']['account'] = account.name
         if message.get('action') == 'subscribe':
-            Subscriber.objects.get_or_create(account=account)  # TODO: do we need it?
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name
             )
         elif message.get('action') == 'unsubscribe':
-            Subscriber.objects.filter(account=account).delete()  # TODO: do we need it?
             await self.channel_layer.group_discard(
                 self.room_group_name,
                 self.channel_name
             )
             await self.close()
-        # Send message to room group
-        # await self.channel_layer.group_send(
-        #     self.room_group_name,
-        #     {
-        #         'type': 'feed_message',
-        #         'message': message
-        #     }
-        # )
 
     # Receive message from room group
     async def feed_message(self, event):
@@ -57,5 +46,4 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
 
         # Send message to WebSocket
         message.update({'account': self.scope['session']['account']})
-        print(message)
         await self.send_json(content=message)
