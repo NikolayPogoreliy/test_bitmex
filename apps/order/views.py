@@ -67,6 +67,5 @@ class OrderView(
             raise exceptions.PermissionDenied('You can not delete this order')
         client = BitmexClient(account)
         result = client.order_delete(order.order_id)[0]
-        print(result)
         result = self._update_object(result, account)
         return Response(result)
