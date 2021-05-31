@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
     'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'corsheaders',
     'rest_framework', 'rest_framework_api_key', 'django_filters', 'channels', 'drf_yasg', 'apps.account', 'apps.order',
-    'apps.subscription']
+    'apps.subscription', 'apps.front']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
