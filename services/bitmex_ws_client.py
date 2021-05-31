@@ -16,7 +16,7 @@ class GwBitMEXWebsocket(BitMEXWebsocket):
         message = json.loads(message)
         if message['subscribe'] in self.user_subscription:
             channel_layer = get_channel_layer()
-            results=message.get('data')
+            results=message.get('data')[0]
             data = {
                 'timestamp': results.get('timestamp'),
                 'symbol': results.get('symbol'),
@@ -32,11 +32,12 @@ class GwBitMEXWebsocket(BitMEXWebsocket):
 class BitmexWsClient:
 
     def __init__(self):
-        self.ws_client = BitMEXWebsocket(
+        self.ws_client = GwBitMEXWebsocket(
             endpoint="https://testnet.bitmex.com/api/v1",
             api_key=None,
             symbol='XBTUSD',
-            api_secret=None
+            api_secret=None,
+            subscriptions=['instrument']
         )
 
     def get_instrument(self):
