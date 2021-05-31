@@ -19,6 +19,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from apps.front.views import chat
+
 schema_view = get_schema_view(
     openapi.Info(title='BITMEX Gateway', default_version='v1', description='Test description',
         terms_of_service='https://www.google.com/policies/terms/',
@@ -29,5 +31,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [path('admin/', admin.site.urls),
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('account/', include('apps.account.urls')), path('order/', include('apps.order.urls')),
-    path('front/', include('apps.front.urls')), ]
+    path('account/', include('apps.account.urls')),
+    path('order/', include('apps.order.urls')),
+    path('front/', chat), ]
