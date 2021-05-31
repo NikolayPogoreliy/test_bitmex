@@ -36,4 +36,4 @@ def get_report():
         'timestamp': results.get('timestamp'), 'symbol': results.get('symbol'), 'price': results.get('lastPrice')}
     logger.debug(data)
     async_to_sync(channel_layer.group_send)("bitmex_feed", {
-        "type": "bitmex_feed.feed_message", "message": json.dumps(data), }, )
+        "type": "feed_message", "message": json.dumps(data), }, )

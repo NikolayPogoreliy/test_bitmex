@@ -25,16 +25,16 @@ class GwBitMEXWebsocket(BitMEXWebsocket, metaclass=Singleton):
     def __on_message(self, message):
         '''Handler for parsing WS messages.'''
         message = json.loads(message)
-        print(message)
+        self.logger.debug(message)
         if message['subscribe'] in self.user_subscription:
             # channel_layer = get_channel_layer()
             results = message.get('data')[0]
             data = {
                 'timestamp': results.get('timestamp'), 'symbol': results.get('symbol'),
                 'price': results.get('markPrice')}
-            print(data)
+            self.logger.debug(data)
             async_to_sync(self.channel_layer.group_send)("bitmex_feed", {
-                "type": "bitmex_feed.feed_message", "message": json.dumps(data), }, )
+                "type": "feed_message", "message": json.dumps(data), }, )
         self._BitMEXWebsocket__on_message(message)
 
 
