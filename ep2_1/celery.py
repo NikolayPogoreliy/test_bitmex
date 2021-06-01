@@ -1,7 +1,5 @@
-import json
 import os
 
-from asgiref.sync import async_to_sync
 from celery import Celery
 from celery.utils.log import get_task_logger
 from channels.layers import get_channel_layer
@@ -20,7 +18,7 @@ logger = get_task_logger(__name__)
 
 @celery_app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(5.0, get_report.s(), )
+    sender.add_periodic_task(10.0, get_report.s(), )
 
 
 @celery_app.task
@@ -31,9 +29,10 @@ def get_report():
     channel_layer = get_channel_layer()
     if not ws_list:
         ws_list.append(BitmexWsClient())
-    results = ws_list[0].get_instrument()
-    data = {
-        'timestamp': results.get('timestamp'), 'symbol': results.get('symbol'), 'price': results.get('lastPrice')}
-    logger.debug(data)
-    async_to_sync(channel_layer.group_send)("bitmex_feed", {
-        "type": "feed_message", "message": json.dumps(data), }, )
+
+# results = ws_list[0].get_instrument()
+#     data = {
+#         'timestamp': results.get('timestamp'), 'symbol': results.get('symbol'), 'price': results.get('lastPrice')}
+#     logger.debug(data)
+#     async_to_sync(channel_layer.group_send)("bitmex_feed", {
+#         "type": "feed_message", "message": json.dumps(data), }, )
