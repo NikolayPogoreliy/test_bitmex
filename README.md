@@ -1,5 +1,18 @@
 # BITMEX gateway
 
+Gateway fot BitMEX currency trading platform.
+
+Used:
+
+django + DRF
+
+Django Channels (for user subscriptions over websockets)
+
+Celery (separately running bitmex ws client, single-ran task)
+
+bitmex/bitmex-ws - API/API-ws for BitMEX platform 
+
+
 ## Setup
 
 ### 1.Clone project
@@ -70,11 +83,18 @@ DEBUG=True
 
 ### 5 Start application
 
+#### 5.1 Start Redis-server in new terminal
+
+`redis-server`
+
+#### 5.2 Start Django-app 
+
 `./manage.py runserver`
+
+#### 5.3 Start Celery worker
 
 `celery -A ep2_1 worker`
 
-`celery -A ep2_1 beat`
 
 
 
