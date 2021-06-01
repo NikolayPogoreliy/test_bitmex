@@ -1,7 +1,5 @@
 from django.apps import AppConfig
 
-from services.bitmex_ws_client import GwBitMEXWebsocket
-
 
 class SubscriptionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'

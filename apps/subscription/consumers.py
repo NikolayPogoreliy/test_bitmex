@@ -3,7 +3,6 @@ import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from apps.account.models import Account
-# TODO: add bitmex-ws
 from utills.async_utills import async_get_object_or_404
 
 
@@ -28,6 +27,7 @@ class SubscriptionConsumer(AsyncJsonWebsocketConsumer):
         self.scope['session']['account'] = account.name
         if message.get('action') == 'subscribe':
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+
         elif message.get('action') == 'unsubscribe':
             await self.channel_layer.group_discard(
                 self.room_group_name,
