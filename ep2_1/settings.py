@@ -167,7 +167,12 @@ CHANNEL_LAYERS = {
             "hosts": [(
                 os.getenv('CHANNELS_HOST', '127.0.0.1'),
                 int(os.getenv('CHANNELS_PORT', 6379))
-            )], }, }, }
+            )],
+            "capacity": 1500,  # default 100
+            "expiry": 10,  # default 60
+        },
+    },
+}
 REDIS_ADDR = f'redis://{os.getenv("CHANNELS_HOST", "127.0.0.1")}:{os.getenv("CHANNELS_PORT", 6379)}'
 CELERY_BROKER_URL = REDIS_ADDR + '/1'
 CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
@@ -177,3 +182,5 @@ DJANGO_CELERY_BEAT_TZ_AWARE = True
 CELERY_ENABLE_UTC = False
 
 BITMEX_FEED_PERIOD = float(os.getenv('BITMEX_FEED_PERIOD', 5.0))
+
+WS_LIST = []
