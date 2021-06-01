@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ep2_1.settings')
 
 celery_app = Celery('ep2_1')
 celery_app.config_from_object('django.conf:settings', namespace='CELERY')
-celery_app.autodiscover_tasks()
+# celery_app.autodiscover_tasks()
 
 
 logger = get_task_logger(__name__)
@@ -27,3 +27,6 @@ def get_report():
             api_key=None,
             symbol='XBTUSD',
             api_secret=None))
+
+
+# get_report.delay()
