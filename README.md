@@ -91,11 +91,4 @@ DEBUG=True
 
 `./manage.py runserver`
 
-#### 5.3 Start Celery worker
-
-`celery -A ep2_1 worker`
-
-
-
-
-
+`./manage.py runws`

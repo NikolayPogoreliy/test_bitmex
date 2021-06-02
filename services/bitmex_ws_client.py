@@ -135,7 +135,7 @@ class GwBitMEXWebsocket(BitMEXWebsocket, metaclass=Singleton):
             sleep(0.1)
 
     def __send_command(self, command, args=None):
-        '''Send a raw command.'''
+        '''Send a raw commands.'''
         if args is None:
             args = []
         self.ws.send(json.dumps({"op": command, "args": args}))
