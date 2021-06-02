@@ -72,10 +72,4 @@ DEBUG=True
 
 `./manage.py runserver`
 
-`celery -A ep2_1 worker`
-
-`celery -A ep2_1 beat`
-
-
-
-
+`./manage.py runws`

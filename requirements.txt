@@ -10,7 +10,7 @@ bitmex==0.2.2
 bitmex-ws==0.4.0
 bravado==11.0.3
 bravado-core==5.17.0
-celery==5.1.0
+cached-property==1.5.2
 certifi==2020.12.5
 cffi==1.14.5
 channels==3.0.3
@@ -26,6 +26,7 @@ coreschema==0.0.4
 cryptography==3.4.7
 daphne==3.0.2
 Django==3.2.3
+django-channels==0.7.0
 django-cors-headers==3.7.0
 django-filter==2.4.0
 django-pgcrypto-fields==2.6.0
@@ -90,5 +91,6 @@ vine==5.0.0
 wcwidth==0.2.5
 webcolors==1.11.1
 websocket-client==0.53.0
+websockets==9.1
 zipp==3.4.1
 zope.interface==5.4.0
