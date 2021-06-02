@@ -3,10 +3,8 @@ import json
 
 import websockets
 from channels.layers import get_channel_layer
-
-
 # CHANNEL_LAYERS = settings.CHANNEL_LAYERS
-
+from django.core.management import BaseCommand
 
 
 async def message_handler(ws):
@@ -36,9 +34,26 @@ async def consume(url):
         await message_handler(ws)
 
 
-if __name__ == '__main__':
+async def run():
     loop = asyncio.get_event_loop()
     loop.run_until_complete(
         consume('wss://testnet.bitmex.com/realtime?subscribe=instrument:XBTUSD')
     )
     loop.run_forever()
+
+
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(
+            consume('wss://testnet.bitmex.com/realtime?subscribe=instrument:XBTUSD')
+        )
+        loop.run_forever()
+
+
+# if __name__ == '__main__':
+#     loop = asyncio.get_event_loop()
+#     loop.run_until_complete(
+#         consume('wss://testnet.bitmex.com/realtime?subscribe=instrument:XBTUSD')
+#     )
+#     loop.run_forever()
